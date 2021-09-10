@@ -2,30 +2,63 @@ function main() {
   // buat variabel sendiri untuk Base URL
   const baseUrl = "https://web-server-book-dicoding.appspot.com";
 
-  const getBook = () => {
-    // membuat instance dari XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-
-    // Tetapkan callback jika response sukses dan error
-    xhr.onload = function () {
-      const responseJSON = JSON.parse(this.responseText);
-      if (responseJSON.error) {
-        showResponseMessage(responseJSON.message);
+  const getBook = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/list`);
+      const responseJson = await response.json();
+      if (responseJson.error) {
+        showResponseMessage(responseJson.message);
       } else {
-        renderAllBooks(responseJSON.books);
+        renderAllBooks(responseJson.books);
       }
+    } catch (error) {
+      showResponseMessage(error);
     }
+  }
 
-    xhr.onerror = function () {
-      showResponseMessage();
-    }
 
-    // membuat GET request dan tetapkan target URL
-    xhr.open("GET", `${baseUrl}/list`);
+  // // PENERAPAN FETCH
+  // const getBook = () => {
+  //   fetch(`${baseUrl}/list`)
+  //   .then(response => {
+  //     return response.json();
+  //   })
+  //   .then(responseJson => {
+  //     if(responseJson.error) {
+  //       showResponseMessage(responseJson.message);
+  //     } else {
+  //       renderAllBooks(responseJson.books);
+  //     }
+  //   })
+  //   .catch(error => {
+  //     showResponseMessage(error);
+  //   })
+  // };
 
-    // mengirim request
-    xhr.send();
-  };
+
+
+  // const getBook = () => {
+  //   // membuat instance dari XMLHttpRequest
+  //   const xhr = new XMLHttpRequest();
+  //   // Tetapkan callback jika response sukses dan error
+  //   xhr.onload = function () {
+  //     const responseJSON = JSON.parse(this.responseText);
+  //     if (responseJSON.error) {
+  //       showResponseMessage(responseJSON.message);
+  //     } else {
+  //       renderAllBooks(responseJSON.books);
+  //     }
+  //   }
+
+  //   xhr.onerror = function () {
+  //     showResponseMessage();
+  //   }
+
+  //   // membuat GET request dan tetapkan target URL
+  //   xhr.open("GET", `${baseUrl}/list`);
+  //   // mengirim request
+  //   xhr.send();
+  // };
 
 
   const insertBook = (book) => {
